@@ -1,0 +1,8 @@
+modules:
+  http_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      # On accepte aussi 401/403 car l'API peut répondre sans auth
+      valid_status_codes: [200, 201, 204, 401, 403]
+      method: GET

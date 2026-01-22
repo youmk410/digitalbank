@@ -84,6 +84,49 @@ ON public.profiles FOR ALL
 TO authenticated
 USING (public.is_role('admin'))
 WITH CHECK (public.is_role('admin'));
- 
 
+
+ 
+-- ========== CUSTOMERS ==========
+
+-- Admin : accès complet
+
+CREATE POLICY "customers_admin_all"
+
+ON public.customers FOR ALL
+
+TO authenticated
+
+USING (public.is_role('admin'))
+
+WITH CHECK (public.is_role('admin'));
+ 
+-- Analyst + customer_service : lecture totale
+
+CREATE POLICY "customers_read_staff"
+
+ON public.customers FOR SELECT
+
+TO authenticated
+
+USING (
+
+  public.is_role('admin')
+
+  OR public.is_role('analyst')
+
+  OR public.is_role('customer_service')
+
+);
+ 
+-- Customer : lecture uniquement sa fiche client
+
+CREATE POLICY "customers_read_own"
+
+ON public.customers FOR SELECT
+
+TO authenticated
+
+USING (customer_id = public.current_customer_id());
+ 
 

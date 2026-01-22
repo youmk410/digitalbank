@@ -13,6 +13,42 @@ FEATURES = ['amount', 'hour_of_day', 'day_of_week', 'cat_code', 'loc_code']
 def home():
     return render_template('home.html')
 
+@app.route('/dashboard', methods=['GET'])
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/admin', methods=['GET'])
+def admin():
+    return render_template('admin.html')
+
+@app.route('/reports', methods=['GET'])
+def reports():
+    return render_template('reports.html')
+
+@app.route('/alerts', methods=['GET'])
+def alerts():
+    return render_template('alerts.html')
+
+@app.route('/logs', methods=['GET'])
+def logs():
+    return render_template('logs.html')
+
+@app.route('/settings', methods=['GET'])
+def settings():
+    return render_template('settings.html')
+
+@app.route('/docs', methods=['GET'])
+def docs():
+    return render_template('docs.html')
+
+@app.route('/about', methods=['GET'])
+def about():
+    return render_template('about.html')
+
+@app.route('/support', methods=['GET'])
+def support():
+    return render_template('support.html')
+
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()

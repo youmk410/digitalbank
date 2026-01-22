@@ -95,3 +95,57 @@ ON public.customers FOR SELECT
 TO authenticated
 USING (customer_id = public.current_customer_id());
 
+-- ========== ACCOUNTS ==========
+-- Admin : accès complet
+CREATE POLICY "accounts_admin_all"
+ON public.accounts FOR ALL
+TO authenticated
+USING (public.is_role('admin'))
+WITH CHECK (public.is_role('admin'));
+
+-- Analyst + customer_service : lecture totale
+CREATE POLICY "accounts_read_staff"
+ON public.accounts FOR SELECT
+TO authenticated
+USING (
+  public.is_role('admin')
+  OR public.is_role('analyst')
+  OR public.is_role('customer_service')
+);
+
+-- Customer : lecture uniquement ses comptes
+CREATE POLICY "accounts_read_own"
+ON public.accounts FOR SELECT
+TO authenticated
+USING (customer_id = public.current_customer_id());
+
+-- ========== TRANSACTIONS ==========
+-- Admin : accès complet
+CREATE POLICY "transactions_admin_all"
+ON public.transactions FOR ALL
+TO authenticated
+USING (public.is_role('admin'))
+WITH CHECK (public.is_role('admin'));
+
+-- Analyst + customer_service : lecture totale
+CREATE POLICY "transactions_read_staff"
+ON public.transactions FOR SELECT
+TO authenticated
+USING (
+  public.is_role('admin')
+  OR public.is_role('analyst')
+  OR public.is_role('customer_service')
+);
+
+-- Customer : lecture transactions liées à ses comptes
+CREATE POLICY "transactions_read_own"
+ON public.transactions FOR SELECT
+TO authenticated
+USING (
+  EXISTS (
+    SELECT 1
+    FROM public.accounts a
+    WHERE a.account_id = transactions.account_id
+      AND a.customer_id = public.current_customer_id()
+  )
+);

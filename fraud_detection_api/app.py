@@ -9,6 +9,10 @@ with open('fraud_model.pkl', 'rb') as f:
 
 FEATURES = ['amount', 'hour_of_day', 'day_of_week', 'cat_code', 'loc_code']
 
+@app.route('/', methods=['GET'])
+def home():
+    return render_template('home.html')
+
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json()

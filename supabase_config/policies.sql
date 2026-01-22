@@ -66,4 +66,24 @@ GRANT EXECUTE ON FUNCTION public.is_role(text) TO authenticated;
 
 GRANT EXECUTE ON FUNCTION public.current_customer_id() TO authenticated;
  
+ 
+ -- =========================================================
+-- 4) CREATE policies
+-- =========================================================
+ 
+-- ========== PROFILES ==========
+-- Lire son propre profil
+CREATE POLICY "profiles_read_own"
+ON public.profiles FOR SELECT
+TO authenticated
+USING (user_id = auth.uid());
+ 
+-- Admin : tout sur profiles 
+CREATE POLICY "profiles_admin_all"
+ON public.profiles FOR ALL
+TO authenticated
+USING (public.is_role('admin'))
+WITH CHECK (public.is_role('admin'));
+ 
+
 

@@ -29,5 +29,9 @@ def predict():
 
     return jsonify({'is_fraud': pred, 'probability': proba})
 
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'ok'}), 200
+
 if __name__ == '__main__':
     app.run(debug=True)
